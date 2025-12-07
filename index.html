@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>八大行星 AR (融合完美版 V21)</title>
+    <title>八大行星 AR (防黑屏 V22)</title>
     
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -10,16 +10,15 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
     <style>
-      /* --- 按钮样式 --- */
+      /* 按钮样式 */
       #ar-button {
         display: none;
         position: fixed;
         bottom: 50px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 9999; /* 保证在最上层 */
-        
-        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        z-index: 9999;
+        background: linear-gradient(90deg, #ff512f, #dd2476); /* 改个颜色区分 */
         color: white;
         border: none;
         border-radius: 50px;
@@ -29,102 +28,71 @@
         font-size: 18px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         cursor: pointer;
-        /* 禁止按钮上的默认触摸行为，防止冲突 */
         touch-action: none; 
       }
       
-      #ar-button:active {
-        transform: translateX(-50%) scale(0.95);
-      }
+      #ar-button:active { transform: translateX(-50%) scale(0.95); }
 
-      /* 隐藏 Model-Viewer (移出屏幕) */
+      /* Model Viewer 保持后台加载 */
       model-viewer {
         position: fixed;
-        top: -10000px; 
-        left: -10000px;
+        top: 0; 
+        left: 0;
         width: 1px;
         height: 1px;
         z-index: -1;
+        opacity: 0; /* 使用透明度隐藏，防止 display:none 导致的初始化失败 */
       }
     </style>
 
     <script>
-      // --- ⭐ 修复版手势控制 (V21) ⭐ ---
+      // --- 手势控制 (保持不变) ---
       AFRAME.registerComponent('swipe-control', {
         schema: { factor: {default: 0.015} },
         init: function () {
           this.handleTouchStart = this.handleTouchStart.bind(this);
           this.handleTouchMove = this.handleTouchMove.bind(this);
           this.resetAnimation = this.resetAnimation.bind(this);
-          
           this.initialAnimation = this.el.getAttribute('animation');
-          
-          // 监听整个场景的触摸
           this.el.sceneEl.addEventListener('touchstart', this.handleTouchStart, {passive: false});
           this.el.sceneEl.addEventListener('touchmove', this.handleTouchMove, {passive: false});
-
-          // 向上查找 Target 来监听重置信号
           const targetEntity = this.el.closest('[mindar-image-target]');
-          if (targetEntity) {
-            targetEntity.addEventListener('targetFound', this.resetAnimation);
-          }
-          
-          this.startX = 0;
-          this.startY = 0;
-          this.isDragging = false;
+          if (targetEntity) { targetEntity.addEventListener('targetFound', this.resetAnimation); }
+          this.startX = 0; this.startY = 0; this.isDragging = false;
         },
-
         resetAnimation: function () {
           this.isDragging = false;
-          // 角度归零
           this.el.object3D.rotation.set(0, 0, 0);
-          // 恢复自动旋转
           if (!this.el.hasAttribute('animation') && this.initialAnimation) {
             this.el.setAttribute('animation', this.initialAnimation);
           }
         },
-
         handleTouchStart: function (event) {
-          // 记录位置
           this.startX = event.touches[0].clientX;
           this.startY = event.touches[0].clientY;
           this.isDragging = true;
-
-          // 移除自动旋转
-          if (this.el.hasAttribute('animation')) {
-            this.el.removeAttribute('animation');
-          }
+          if (this.el.hasAttribute('animation')) { this.el.removeAttribute('animation'); }
         },
-
         handleTouchMove: function (event) {
           if (!this.isDragging) return;
-
-          // ⭐ 关键修复：阻止浏览器默认滚动行为 ⭐
-          // 这样手指滑动时，页面不会动，只有模型会动
           event.preventDefault(); 
-
           const currentX = event.touches[0].clientX;
           const currentY = event.touches[0].clientY;
-          
           const deltaX = currentX - this.startX;
           const deltaY = currentY - this.startY;
-
           this.startX = currentX;
           this.startY = currentY;
-
-          // 360度全方位旋转 (X轴和Y轴)
           this.el.object3D.rotation.y += deltaX * this.data.factor;
           this.el.object3D.rotation.x += deltaY * this.data.factor;
         }
       });
 
-      // --- 合照功能逻辑 (保持不变) ---
+      // --- ⭐ 修复版合照逻辑 ⭐ ---
       document.addEventListener("DOMContentLoaded", function() {
         const arButton = document.getElementById("ar-button");
         const modelViewer = document.getElementById("viewer-singleton");
         const buttonText = document.getElementById("btn-text");
 
-        // GitHub 文件名对照表
         const planets = [
           { index: 0, name: "水星", file: "./Mercury.glb" },
           { index: 1, name: "金星", file: "./Venus.glb" },
@@ -136,8 +104,44 @@
           { index: 7, name: "海王星", file: "./Neptune.glb" }
         ];
 
+        // 点击按钮时的处理
         arButton.addEventListener("click", () => {
-          if (modelViewer) modelViewer.activateAR();
+          if (!modelViewer.src) {
+            alert("模型尚未加载，请稍后再试");
+            return;
+          }
+
+          // ⭐ 关键步骤：尝试暂停 MindAR 的渲染循环，释放资源 ⭐
+          const scene = document.querySelector('a-scene');
+          if (scene) {
+             // 暂停 A-Frame 场景，防止它和 AR 模式抢占 GPU
+             scene.pause(); 
+             
+             // 尝试找到 MindAR 的视频背景并暂停它
+             const video = document.querySelector('video');
+             if (video) video.pause();
+          }
+
+          // 启动 Model Viewer AR
+          try {
+            modelViewer.activateAR();
+          } catch (error) {
+            alert("无法启动 AR 合照模式: " + error);
+            // 如果失败，恢复场景
+            if (scene) scene.play();
+          }
+        });
+
+        // 监听 AR 会话结束，恢复 MindAR
+        // 这一步是为了当你关闭合照回到网页时，卡片识别还能继续用
+        /* 注意：不同浏览器对 AR 结束的事件支持不同，这里是尝试性恢复 */
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                const scene = document.querySelector('a-scene');
+                const video = document.querySelector('video');
+                if (scene) scene.play();
+                if (video) video.play();
+            }
         });
 
         const scene = document.querySelector('a-scene');
@@ -145,6 +149,7 @@
           const target = document.querySelector(`[mindar-image-target="targetIndex: ${planet.index}"]`);
           if (target) {
             target.addEventListener("targetFound", event => {
+              // 预加载模型
               modelViewer.src = planet.file;
               buttonText.innerText = "与" + planet.name + "合照 📷";
               arButton.style.display = "flex";
@@ -161,7 +166,15 @@
   <body>
     <button id="ar-button"><span id="btn-text">合照</span></button>
 
-    <model-viewer id="viewer-singleton" src="" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+    <model-viewer 
+      id="viewer-singleton" 
+      src="" 
+      ar 
+      ar-modes="scene-viewer webxr quick-look" 
+      camera-controls 
+      auto-rotate 
+      shadow-intensity="1">
+    </model-viewer>
 
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
              color-space="sRGB" 
