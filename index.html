@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星科学展 AR</title>
+    <title>八大行星 AR (最终修正版)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
              color-space="sRGB" 
-             renderer="colorManagement: true" 
+             renderer="colorManagement: true, physicallyCorrectLights: false" 
              vr-mode-ui="enabled: false" 
              device-orientation-permission-ui="enabled: false">
 
@@ -25,6 +25,9 @@
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-light type="ambient" color="#ffffff" intensity="2"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="1.5" position="1 1 1"></a-light>
 
       <a-entity mindar-image-target="targetIndex: 0">
         <a-gltf-model src="#mercury" position="0 0 0" scale="0.005 0.005 0.005" 
@@ -51,14 +54,14 @@
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 4">
-        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.004 0.004 0.004" 
+        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.005 0.005 0.005" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 5">
-        <a-gltf-model src="#saturn" position="0 0 0" scale="0.003 0.003 0.003" rotation="25 0 0" 
-          animation="property: rotation; to: 25 360 0; loop: true; dur: 20000; easing: linear">
+        <a-gltf-model src="#saturn" position="0 0 0" scale="0.004 0.004 0.004" rotation="20 0 0"
+          animation="property: rotation; to: 20 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
