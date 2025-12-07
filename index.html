@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星 AR (尺寸定稿 V10)</title>
+    <title>八大行星 AR </title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
@@ -38,7 +38,7 @@
 
       <a-entity mindar-image-target="targetIndex: 1">
         <a-gltf-model src="#Venus" position="0 0.3 0" scale="0.6 0.6 0.6" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 25000; easing: linear">
+          animation="property: rotation; to: 90 -360 0; loop: true; dur: 25000; easing: linear">
         </a-gltf-model>
       </a-entity>
       
@@ -67,8 +67,8 @@
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 6">
-        <a-gltf-model src="#Uranus" position="0 0.3 0" scale="0.00001 0.00001 0.00001" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 20000; easing: linear">
+        <a-gltf-model src="#Uranus" position="0 0.3 0" scale="0.00001 0.00001 0.00001" rotation="0 0 90"
+          animation="property: rotation; to: 360 0 90; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
       
