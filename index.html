@@ -1,53 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Solar System AR</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>八大行星 AR (最终重生版)</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+  </head>
+  
+  <body>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
+             color-space="sRGB" 
+             renderer="colorManagement: true, physicallyCorrectLights: false, sortObjects: true" 
+             vr-mode-ui="enabled: false" 
+             device-orientation-permission-ui="enabled: false">
 
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-aframe.prod.js"></script>
+      <a-assets>
+        <a-asset-item id="Mercury" src="./Mercury.glb"></a-asset-item>
+        <a-asset-item id="Venus" src="./Venus.glb"></a-asset-item>
+        <a-asset-item id="Earth" src="./Earth.glb"></a-asset-item>
+        <a-asset-item id="Mars" src="./Mars.glb"></a-asset-item>
+        <a-asset-item id="Jupiter" src="./Jupiter.glb"></a-asset-item>
+        <a-asset-item id="Saturn" src="./Saturn.glb"></a-asset-item>
+        <a-asset-item id="Uranus" src="./Uranus.glb"></a-asset-item>
+        <a-asset-item id="Neptune" src="./Neptune.glb"></a-asset-item>
+      </a-assets>
 
-  <!-- Draco 解码器修复组件 -->
-  <script>
-    AFRAME.registerComponent('fix-draco', {
-      init() {
-        THREE.DRACOLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-      }
-    });
-  </script>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <style>
-    body { margin: 0; overflow: hidden; }
-  </style>
-</head>
+      <a-light type="ambient" color="#ffffff" intensity="2"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="1.5" position="2 4 4"></a-light>
 
-<body>
-  <a-scene
-    mindar-image="imageTargetSrc: targets.mind; autoStart: true"
-    embedded
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model src="#Mercury" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-    <a-camera look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-gltf-model src="#Venus" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-    <!-- 灯光（强烈建议开启） -->
-    <a-entity light="type: ambient; intensity: 1"></a-entity>
-    <a-entity light="type: directional; intensity: 1" position="1 1 1"></a-entity>
+      <a-entity mindar-image-target="targetIndex: 2">
+        <a-gltf-model src="#Earth" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-    <!-- 以下是示例：行星自动旋转 + Draco -->
-    <a-entity 
-      mindar-image-target="targetIndex: 2"
-      animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear">
+      <a-entity mindar-image-target="targetIndex: 3">
+        <a-gltf-model src="#Mars" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-      <a-gltf-model 
-        src="earth.glb" 
-        scale="0.25 0.25 0.25"
-        fix-draco>
-      </a-gltf-model>
+      <a-entity mindar-image-target="targetIndex: 4">
+        <a-gltf-model src="#Jupiter" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-    </a-entity>
+      <a-entity mindar-image-target="targetIndex: 5">
+        <a-gltf-model src="#Saturn" position="0 0 0" scale="0.04 0.04 0.04" rotation="20 0 0"
+          animation="property: rotation; to: 20 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
 
-  </a-scene>
-</body>
+      <a-entity mindar-image-target="targetIndex: 6">
+        <a-gltf-model src="#Uranus" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
+
+      <a-entity mindar-image-target="targetIndex: 7">
+        <a-gltf-model src="#Neptune" position="0 0 0" scale="0.05 0.05 0.05" 
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+        </a-gltf-model>
+      </a-entity>
+
+    </a-scene>
+  </body>
 </html>
