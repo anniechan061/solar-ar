@@ -2,111 +2,11 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星科学展 AR 互动</title>
+    <title>八大行星科学展 AR</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
-    <style>
-      /* --- UI 界面样式：半透明科技感面板 --- */
-      body { margin: 0; font-family: 'Microsoft YaHei', sans-serif; }
-      
-      #info-panel {
-        display: none; /* 默认隐藏 */
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.85); /* 深黑背景 */
-        color: white;
-        padding: 20px 20px 40px 20px;
-        box-sizing: border-box;
-        text-align: center;
-        z-index: 999;
-        border-top: 3px solid #00d2ff; /* 顶部亮蓝条 */
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        animation: slideUp 0.3s ease-out;
-      }
-
-      @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-      }
-
-      #info-title {
-        font-size: 26px;
-        font-weight: bold;
-        color: #ffcc00;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-      }
-
-      #info-desc {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #ddd;
-        margin-bottom: 20px;
-        max-height: 150px;
-        overflow-y: auto; /*如果文字太长可以滚动*/
-      }
-
-      #close-btn {
-        background: linear-gradient(90deg, #ff4444, #cc0000);
-        color: white;
-        border: none;
-        padding: 10px 40px;
-        border-radius: 50px;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(255, 68, 68, 0.4);
-      }
-    </style>
-
-    <script>
-      // --- 互动组件：处理点击事件 ---
-      AFRAME.registerComponent('click-handler', {
-        schema: {
-          name: {type: 'string', default: ''},
-          desc: {type: 'string', default: ''}
-        },
-        init: function () {
-          this.el.addEventListener('click', () => {
-            const panel = document.querySelector("#info-panel");
-            const title = document.querySelector("#info-title");
-            const desc = document.querySelector("#info-desc");
-
-            // 更新文字
-            title.innerText = this.data.name;
-            desc.innerText = this.data.desc;
-            
-            // 显示面板
-            panel.style.display = 'block';
-
-            // 点击时的缩放动画反馈
-            this.el.setAttribute('animation__click', {
-              property: 'scale',
-              to: '0.4 0.4 0.4', // 稍微变大一点点
-              dur: 150,
-              dir: 'alternate',
-              loop: 1
-            });
-          });
-        }
-      });
-
-      function closePanel() {
-        document.querySelector("#info-panel").style.display = 'none';
-      }
-    </script>
   </head>
-
   <body>
-    <div id="info-panel">
-      <div id="info-title"></div>
-      <div id="info-desc"></div>
-      <button id="close-btn" onclick="closePanel()">关闭介绍</button>
-    </div>
-
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
              color-space="sRGB" 
              renderer="colorManagement: true, physicallyCorrectLights" 
@@ -124,70 +24,52 @@
         <a-asset-item id="neptune" src="./neptune.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false">
-        <a-entity cursor="fuse: false; rayOrigin: mouse;" raycaster="objects: .clickable"></a-entity>
-      </a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#mercury" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 水星 (Mercury); desc: 它是离太阳最近的行星，表面布满环形山，看起来很像月球。昼夜温差极大！"
+        <a-gltf-model src="#mercury" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model src="#venus" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 金星 (Venus); desc: 全天最亮的“启明星”。它有厚厚的云层导致温室效应，是太阳系最热的行星。"
+        <a-gltf-model src="#venus" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 2">
-        <a-gltf-model src="#earth" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 地球 (Earth); desc: 我们的家园！它是蓝色的，因为表面71%被海洋覆盖，是已知唯一有生命的星球。"
+        <a-gltf-model src="#earth" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 3">
-        <a-gltf-model src="#mars" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 火星 (Mars); desc: 著名的红色星球（氧化铁/铁锈）。这里有太阳系最高的山——奥林帕斯山。"
+        <a-gltf-model src="#mars" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 4">
-        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 木星 (Jupiter); desc: 太阳系的老大！体积能装下1300个地球。它是一个气态巨行星，拥有著名的大红斑风暴。"
+        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 5">
         <a-gltf-model src="#saturn" position="0 0 0" scale="0.25 0.25 0.25" rotation="25 0 0" 
-          class="clickable"
-          click-handler="name: 土星 (Saturn); desc: 拥有最迷人的光环！它的密度比水还小，如果有个够大的浴缸，土星能浮在水面上。"
           animation="property: rotation; to: 25 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 6">
-        <a-gltf-model src="#uranus" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 天王星 (Uranus); desc: 漂亮的青色冰巨星。它最特别的地方是“躺着”自转的，像个在轨道上滚动的球。"
+        <a-gltf-model src="#uranus" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 7">
-        <a-gltf-model src="#neptune" position="0 0 0" scale="0.3 0.3 0.3" rotation="0 0 0" 
-          class="clickable"
-          click-handler="name: 海王星 (Neptune); desc: 离太阳最远、最冷的行星。它呈现深蓝色，内部风速惊人，是太阳系风暴最强的地方。"
+        <a-gltf-model src="#neptune" position="0 0 0" scale="0.3 0.3 0.3" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
