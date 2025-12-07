@@ -2,14 +2,16 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星 AR (最终修正版)</title>
+    <title>八大行星 AR (强力修复版)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
   </head>
+  
   <body>
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
              color-space="sRGB" 
-             renderer="colorManagement: true, physicallyCorrectLights: false" 
+             renderer="colorManagement: true, physicallyCorrectLights: false, sortObjects: true" 
              vr-mode-ui="enabled: false" 
              device-orientation-permission-ui="enabled: false">
 
@@ -27,52 +29,53 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-light type="ambient" color="#ffffff" intensity="2"></a-light>
-      <a-light type="directional" color="#ffffff" intensity="1.5" position="1 1 1"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="1.5" position="2 4 4"></a-light>
+
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#mercury" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#mercury" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model src="#venus" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#venus" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 2">
-        <a-gltf-model src="#earth" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#earth" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 3">
-        <a-gltf-model src="#mars" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#mars" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 4">
-        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#jupiter" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 5">
-        <a-gltf-model src="#saturn" position="0 0 0" scale="0.004 0.004 0.004" rotation="20 0 0"
+        <a-gltf-model src="#saturn" position="0 0 0" scale="0.04 0.04 0.04" rotation="20 0 0"
           animation="property: rotation; to: 20 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 6">
-        <a-gltf-model src="#uranus" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#uranus" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 7">
-        <a-gltf-model src="#neptune" position="0 0 0" scale="0.005 0.005 0.005" 
+        <a-gltf-model src="#neptune" position="0 0 0" scale="0.05 0.05 0.05" 
           animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
         </a-gltf-model>
       </a-entity>
