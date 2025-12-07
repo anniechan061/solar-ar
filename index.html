@@ -2,41 +2,50 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星 AR (360全自由旋转 V17)</title>
+    <title>八大行星 AR (最终完美 V18)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
 
     <script>
-      // --- ⭐ 全方位手势控制脚本 (360度版) ⭐ ---
+      // --- ⭐ 修复版手势控制脚本 (V18) ⭐ ---
       AFRAME.registerComponent('swipe-control', {
         schema: {
-          factor: {default: 0.015} // 旋转灵敏度
+          factor: {default: 0.015} 
         },
         init: function () {
           this.handleTouchStart = this.handleTouchStart.bind(this);
           this.handleTouchMove = this.handleTouchMove.bind(this);
           this.resetAnimation = this.resetAnimation.bind(this);
           
+          // 备份初始动画
           this.initialAnimation = this.el.getAttribute('animation');
           
           this.el.sceneEl.addEventListener('touchstart', this.handleTouchStart);
           this.el.sceneEl.addEventListener('touchmove', this.handleTouchMove);
 
-          // 监听识别成功，用于重置
-          this.el.parentEl.addEventListener('targetFound', this.resetAnimation);
+          // --- ⭐ 核心修复：向上查找真正的 Target (爷爷节点) ⭐ ---
+          // 之前的 parentEl 只是外壳，closest() 可以直接找到带有 mindar-image-target 属性的祖先
+          const targetEntity = this.el.closest('[mindar-image-target]');
+          
+          if (targetEntity) {
+            // 只有当真正的 Target 被识别时，才执行重置
+            targetEntity.addEventListener('targetFound', this.resetAnimation);
+          }
           
           this.startX = 0;
-          this.startY = 0; // 新增：记录 Y 轴位置
+          this.startY = 0;
           this.isDragging = false;
         },
 
         resetAnimation: function () {
-          // 1. 归零所有角度 (X, Y, Z)
-          // 这样下次扫描时，行星又是正正地立在那里的
+          // 1. 停止拖拽状态
+          this.isDragging = false;
+          
+          // 2. 角度归零 (确保星球是正的)
           this.el.object3D.rotation.set(0, 0, 0);
           
-          // 2. 恢复自动旋转
+          // 3. 恢复自动旋转 (把动画属性加回去)
           if (!this.el.hasAttribute('animation') && this.initialAnimation) {
             this.el.setAttribute('animation', this.initialAnimation);
           }
@@ -44,10 +53,10 @@
 
         handleTouchStart: function (event) {
           this.startX = event.touches[0].clientX;
-          this.startY = event.touches[0].clientY; // 新增：记录 Y
+          this.startY = event.touches[0].clientY;
           this.isDragging = true;
 
-          // 手指一碰，移除自动动画
+          // 手指触摸：移除自动动画 -> 变为手动模式
           if (this.el.hasAttribute('animation')) {
             this.el.removeAttribute('animation');
           }
@@ -55,25 +64,17 @@
 
         handleTouchMove: function (event) {
           if (!this.isDragging) return;
-          
-          // 获取当前手指位置
           const currentX = event.touches[0].clientX;
           const currentY = event.touches[0].clientY;
-
-          // 计算移动距离
+          
           const deltaX = currentX - this.startX;
-          const deltaY = currentY - this.startY; // 新增：计算上下移动距离
+          const deltaY = currentY - this.startY;
 
-          // 更新上一次的位置
           this.startX = currentX;
           this.startY = currentY;
 
-          // --- ⭐ 核心修改：同时控制 X 轴和 Y 轴旋转 ⭐ ---
-          
-          // 1. 左右滑动 (DeltaX) -> 控制 Y 轴自转
+          // 手动控制旋转 (X轴和Y轴)
           this.el.object3D.rotation.y += deltaX * this.data.factor;
-          
-          // 2. 上下滑动 (DeltaY) -> 控制 X 轴翻转
           this.el.object3D.rotation.x += deltaY * this.data.factor;
         }
       });
