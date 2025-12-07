@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星 AR </title>
+    <title>八大行星 AR (完美自转修复 V12)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
@@ -31,51 +31,67 @@
       <a-light type="directional" color="#ffffff" intensity="1.5" position="2 4 4"></a-light>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#Mercury" position="0 0.3 0" scale="0.55 0.55 0.55" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Mercury" scale="0.55 0.55 0.55" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model src="#Venus" position="0 0.3 0" scale="0.6 0.6 0.6" rotation="90 0 0"
-          animation="property: rotation; to: 90 -360 0; loop: true; dur: 25000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Venus" scale="0.6 0.6 0.6" 
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 2">
-        <a-gltf-model src="#Earth" position="0 0.3 0" scale="0.001 0.001 0.001" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Earth" scale="0.001 0.001 0.001" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 3">
-        <a-gltf-model src="#Mars" position="0 0.3 0" scale="0.25 0.25 0.25" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Mars" scale="0.25 0.25 0.25" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 4">
-        <a-gltf-model src="#Jupiter" position="0 0.3 0" scale="0.003 0.003 0.003" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 15000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Jupiter" scale="0.003 0.003 0.003" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 15000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 5">
-        <a-gltf-model src="#Saturn" position="0 0.3 0" scale="0.001 0.001 0.001" rotation="110 0 0"
-          animation="property: rotation; to: 110 360 0; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="110 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Saturn" scale="0.001 0.001 0.001" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 6">
-        <a-gltf-model src="#Uranus" position="0 0.3 0" scale="0.00001 0.00001 0.00001" rotation="0 0 90"
-          animation="property: rotation; to: 360 0 90; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Uranus" scale="0.00001 0.00001 0.00001" rotation="0 0 90"
+            animation="property: rotation; to: 0 -360 90; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 7">
-        <a-gltf-model src="#Neptune" position="0 0.3 0" scale="0.001 0.001 0.001" rotation="90 0 0"
-          animation="property: rotation; to: 90 360 0; loop: true; dur: 20000; easing: linear">
-        </a-gltf-model>
+        <a-entity rotation="90 0 0" position="0 0.3 0">
+          <a-gltf-model src="#Neptune" scale="0.001 0.001 0.001" 
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear">
+          </a-gltf-model>
+        </a-entity>
       </a-entity>
 
     </a-scene>
