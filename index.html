@@ -2,54 +2,65 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>八大行星 AR (手势互动版 V14)</title>
+    <title>八大行星 AR (智能重置 V16)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
 
     <script>
-      // --- ⭐ 新增：手势控制组件 ⭐ ---
+      // --- ⭐ 智能手势控制组件 (V16 升级版) ⭐ ---
       AFRAME.registerComponent('swipe-control', {
         schema: {
-          factor: {default: 0.5} // 控制旋转灵敏度
+          factor: {default: 0.015} 
         },
         init: function () {
           this.handleTouchStart = this.handleTouchStart.bind(this);
           this.handleTouchMove = this.handleTouchMove.bind(this);
+          this.resetAnimation = this.resetAnimation.bind(this);
           
-          // 监听整个屏幕的触摸事件
+          // 1. 备份初始的动画设置 (为了以后恢复用)
+          // 我们把 HTML 里写好的 animation 属性存起来
+          this.initialAnimation = this.el.getAttribute('animation');
+          
+          // 2. 监听触摸
           this.el.sceneEl.addEventListener('touchstart', this.handleTouchStart);
           this.el.sceneEl.addEventListener('touchmove', this.handleTouchMove);
+
+          // 3. ⭐ 关键新增：监听“识别成功”事件 ⭐
+          // 注意：targetFound 事件是发给父级 (mindar-image-target) 的，所以我们要监听 parentEl
+          this.el.parentEl.addEventListener('targetFound', this.resetAnimation);
           
           this.startX = 0;
           this.isDragging = false;
         },
+
+        // --- 当重新识别到卡片时，执行这个重置函数 ---
+        resetAnimation: function () {
+          // A. 恢复旋转角度到 0 (从头开始转)
+          this.el.object3D.rotation.y = 0;
+          
+          // B. 把动画属性加回去 (如果之前被移除了)
+          if (!this.el.hasAttribute('animation') && this.initialAnimation) {
+            this.el.setAttribute('animation', this.initialAnimation);
+          }
+        },
+
         handleTouchStart: function (event) {
-          // 1. 记录手指开始的位置
           this.startX = event.touches[0].clientX;
           this.isDragging = true;
 
-          // 2. ⭐ 关键：一旦手指碰到屏幕，立刻移除自动旋转动画
-          // 否则自动动画会和你的手指“打架”
+          // 手指触摸时，移除动画，变成手动模式
           if (this.el.hasAttribute('animation')) {
             this.el.removeAttribute('animation');
           }
         },
+
         handleTouchMove: function (event) {
           if (!this.isDragging) return;
-
-          // 3. 计算手指移动了多少距离
           const currentX = event.touches[0].clientX;
           const deltaX = currentX - this.startX;
           this.startX = currentX;
-
-          // 4. 根据移动距离，修改模型的 Y 轴旋转
-          const currentRotation = this.el.getAttribute('rotation');
-          this.el.setAttribute('rotation', {
-            x: currentRotation.x,
-            y: currentRotation.y + (deltaX * this.data.factor),
-            z: currentRotation.z
-          });
+          this.el.object3D.rotation.y += deltaX * this.data.factor;
         }
       });
     </script>
